@@ -2,238 +2,158 @@
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
   - python
-  - javascript
-
+ 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
-
-includes:
-  - errors
 
 search: true
 ---
 
-# Introduction
+# API Documentation
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the Flood Chaser API! This API provides exposure to a database that collects and postprocesses flood related tweets. The database is a part of the deliverables of the UK Space Agency Space for Smarter Government Programme (SSGP) project. You can view code examples in the dark area to the right on how to access this database through the Flood Chaser API.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+Base URLs:
+https://hydas.co.uk/api/v1/flood/twitter
+> Scroll down for code samples, example requests and responses. 
 
-# Authentication
-
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
+# Flood Tweets
+## Get All Tweets
 
 ```python
-import kittn
+import requests
+headers = {
+  'Accept': 'application/json'
+}
 
-api = kittn.authorize('meowmeowmeow')
+r = requests.get('https://hydas.co.uk/api/v1/flood/twitter/all', params={
+
+}, 
+headers = headers)
+
+print r.json()
 ```
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
 
 > The above command returns JSON structured like this:
 
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
+    "URL": "https://twitter.com/statuses/1011972424135598080", 
+    "about_flood": "n", 
+    "address_tweet": null, 
+    "confidence": null, 
+    "created_at": "2018-06-27 14:00:02.000000", 
+    "id_str": "1011972424135598080", 
+    "index": 0, 
+    "lat_nlp": null, 
+    "lat_tweet": null, 
+    "location": "[]", 
+    "lon_nlp": null, 
+    "lon_tweet": null, 
+    "text": "The latest The significant-events Daily! https://t.co/PEbAo8BBvs Thanks to @arcwinsurance @LegacyPremium @IADCDredging #flood #volcano", 
+    "user_id": 30137142
+  }, 
   {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
+    "URL": "https://twitter.com/statuses/1011972425263796224", 
+    "about_flood": "n", 
+    "address_tweet": null, 
+    "confidence": null, 
+    "created_at": "2018-06-27 14:00:02.000000", 
+    "id_str": "1011972425263796224", 
+    "index": 1, 
+    "lat_nlp": null, 
+    "lat_tweet": null, 
+    "location": "[]", 
+    "lon_nlp": null, 
+    "lon_tweet": null, 
+    "text": "With sandbags lined and barriers put up, many Rock Valley residents are having flashbacks to the floods of 2014. https://t.co/1Iz177SwB7", 
+    "user_id": 14849086
+  }] 
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves all tweets.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET https://hydas.co.uk/api/v1/flood/twitter/all`
+
+### Response Schema
+
+Name | Type | Description | Example
+------- | ----- | -------------|------------
+text|string|The text of the tweet.| Just arrived at Victoria Station. It is flooding inside. Oh dear, it is not looking good for my visit to London!
+URL | string |The URL of the original tweet.|https://twitter.com/statuses/1011972424135598080
+about_flood|string|'y' if the tweet is about a physical flood, 'n' if not.| y 
+address_tweet|string|The address where the tweet was sent if the GPS location function was turned on when tweeting. It's nullable.|Buckingham Palace. London SW1A 1AA.
+created_at|string|The date and time when the tweet was posted.|2018-06-27 14:00:02.000000
+id_str|string|The id of the tweet.|1011972424135598080
+index|integer|The index number in the database.|0
+lat_tweet|float|The latitude of the tweeting coordinates. It's nullable.|51.212 
+lon_tweet|float|The longitude of the tweeting coordinates. It's nullable.|0.001
+lat_nlp|float|The latitude of the geocoded coordinates based on location recognition through NLP. It's nullable.|51.212
+lon_nlp|float|The longitude of the geocoded coordinates based on location recognition through NLP. It's nullable.|51.212
+location|object|A list of locations mentioned in the tweet.|['Victoria Station','London'] 
+confidence |integer|The value reflects the confidence of geocoding. The higher the value, the more confident or less ambiguous we are about the address found via location mention in tweets.| 7
+
+
+## Filter Tweets 
+
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json'
+}
+
+r = requests.get('https://hydas.co.uk/api/v1/flood/
+twitter', params={'userid':'30137142'}, headers = headers)
+
+print r.json()
+
+```
+
+
+> The above command returns JSON structured like this:
+
+```json
+'[
+  {
+    "URL": "https://twitter.com/statuses/1011972424135598080", 
+    "about_flood": "n", 
+    "address_tweet": null, 
+    "confidence": null, 
+    "created_at": "2018-06-27 14:00:02.000000", 
+    "id_str": "1011972424135598080", 
+    "index": 0, 
+    "lat_nlp": null, 
+    "lat_tweet": null, 
+    "location": "[]", 
+    "lon_nlp": null, 
+    "lon_tweet": null, 
+    "text": "The latest The significant-events Daily! https://t.co/PEbAo8BBvs Thanks to @arcwinsurance @LegacyPremium @IADCDredging #flood #volcano", 
+    "user_id": 30137142
+  }
+]'
+```
+
+This endpoint filters the database using the following query parameters. All query parameters can be used the same way as shown in the example on the right dark area. 
+
+### HTTP Request
+
+`GET https://hydas.co.uk/api/v1/flood/twitter?parameter=value`
 
 ### Query Parameters
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint deletes a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+Parameter | Type | Description | Example
+------- | ----- | -------------|------------
+userid | string | The userid of the twitter account. This filters the database to include only tweets sent from this userid|'1009375723855982592'
+latest|integer|This parameter can set to return the latest N amount of tweets from the database.| 100 
+aboutflood|boolean|This parameter will filter tweets to include only the ones related to physical floods.|y
+period | string | The period of interest. By entering the starting datetime and ending datetime, users can filter the database to include tweets sent within the period of interest. Starting and ending datetimes are separated by comma.|'2018-06-27 14:00:00,2018-06-27 18:00:00'
+boundingbox|string| Filter tweets that are located in the bounding box. The format would be: SLat,WLon,NLat,Elon. An example to filter tweets for greater London area is shown on the right.|51.279,-0.516,51.698,0.342
 
